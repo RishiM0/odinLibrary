@@ -1,0 +1,44 @@
+.bookForm {
+    height: 30%;
+    position:absolute;
+    left: 30%;
+    top: 20%;
+    border: 5px solid;
+    border-radius: 10px;
+    padding: 30px;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+#theForm {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.closed {
+    scale:0;
+}
+
+.open {
+    scale:1;
+}
+
+.webpage {
+    display: grid;
+    grid-template-rows: 1rs 9rs;
+    gap: 20px;
+}
+
+.bookList {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.aBook {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
