@@ -42,7 +42,7 @@ actualForm.addEventListener( "submit", (e) => {
     console.log(haveRead)
     let thisBook = new Book(bookName, bookAuthor, bookPages, haveRead);
     myLibrary.push(thisBook);
-    id += 1;
+    id = id + 1;
     addBookToDiv(bookName, bookAuthor, bookPages, haveRead);
     form.classList.add('closed');
     actualForm.reset();
@@ -73,7 +73,9 @@ function addBookToDiv (currentName, currentAuthor, currentPages, currentRead) {
     const readDiv = document.createElement('div');
     readDiv.classList.add('readName'); 
     readDiv.textContent = 'Status: ';
+    readDiv.setAttribute('data-change-index',id);
     readDiv.append(currentRead);
+    console.log(id);
     //readDiv.setAttribute('id', id);
     const deleteDiv = document.createElement('button');
     deleteDiv.textContent = 'delete'
@@ -84,13 +86,31 @@ function addBookToDiv (currentName, currentAuthor, currentPages, currentRead) {
         //deleteButton.onClick = function(e) {
         let target = e.target.id;
         console.log(target);
-        let deletable = document.querySelector(`[data-index="${id}"]`);
+        let deletable = document.querySelector(`[data-index="${target}"]`);
+        console.log(deletable);
         let host = document.querySelector('.bookList')
         host.remove(deletable)
         //use a for each loop to remove them all?
     //};
     });
-    //in delete div must have value as the index (length variable right now)
+
+    const changeDiv = document.createElement('button');
+    changeDiv.textContent = 'change status';
+    changeDiv.classList.add('changer');
+    changeDiv.setAttribute('id',id);
+    changeDiv.addEventListener('click', (e) => {
+        let target = e.target.id;
+        let changable = document.querySelector(`[data-change-index="${target}"]`);
+        if (changable.textContent == 'Status: read') {
+            changable.textContent = 'Status: unread'
+        } else {
+            changable.textContent = 'Status: read'
+        }
+    })
+
+    // This change function only changes div, nothing in the array. lol. I don't think we ever add
+    // to or use the array
+
 
     //From stack overflow:
     //$("#exportValueDiv").text(exportValue); //Replaces text of #exportValueDiv
@@ -101,6 +121,7 @@ function addBookToDiv (currentName, currentAuthor, currentPages, currentRead) {
     bookDiv.appendChild(pagesDiv);
     bookDiv.appendChild(readDiv);
     bookDiv.appendChild(deleteDiv);
+    bookDiv.appendChild(changeDiv);
     booksDiv.appendChild(bookDiv);
 }
 
@@ -114,3 +135,23 @@ function deleteBook(deleteButton) {
         //use a for each loop to remove them all?
     };
 }
+
+
+/*
+
+This is pretty inefficient, in real life you would want to check through the array everytime a new
+book is created, because of this:
+when a user deletes a book, it goes to the book with the same id or index (id would be easier and 
+you should probably add that to the book object if real life) and replace it with "empty" or something
+if it's index based, or just delete it if it's id based (another reason id would be good).
+Actually doing it ID based is way better than index and just need the book objects to have an id property
+so you can just remove it from the array when you delete the div. This also allows you to not care about
+the index in the array at all. When you remove something from the webpage, remove the book with that id
+from the array. 
+
+one small thing, I have it arranged as rows so the change and delete buttons work out, but if u put them
+as boxes, in this javascript dom you need to create a div and put both buttons in that div, and then add
+that div to the bookDiv because then you can have them in a row or whatever because you can deal with them
+independantly of the other stuff.
+
+*/
